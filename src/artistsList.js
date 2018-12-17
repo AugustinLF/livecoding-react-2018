@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+// import {unstable_createResource as createResource} from 'react-cache';
 
 import {getTopArtistsPromise} from './libs/actionsHelpers';
 import {getArtistsList} from './helpers';

@@ -5,6 +5,7 @@ import {getTopArtistsPromise} from './libs/actionsHelpers';
 import {getArtistsList} from './helpers';
 import Card from './components/card';
 import {ThemeProvider} from './components/theme';
+import Loader from './components/loader';
 import ArtistRow from './artistRow';
 import SearchArtist from './searchArtist';
 
@@ -87,7 +88,7 @@ class ArtistsList extends React.Component {
             <ThemeProvider value="green">
                 <Card header={header}>
                     {loading ? (
-                        <div className="loading">Loading</div>
+                        <Loader />
                     ) : (
                         <table>
                             <thead>

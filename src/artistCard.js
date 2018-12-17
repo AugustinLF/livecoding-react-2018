@@ -4,6 +4,7 @@ import React from 'react';
 import {getArtistInfoPromise} from './libs/actionsHelpers';
 import Card from './components/card';
 import {ThemeProvider} from './components/theme';
+import Loader from './components/loader';
 import {formatNumberToString, getSimilarArtistsNames} from './helpers';
 import Tag from './tag';
 
@@ -69,7 +70,7 @@ class ArtistCard extends React.Component {
                             </div>
                         </div>
                     ) : (
-                        <div className="loading">Loading</div>
+                        <Loader />
                     )}
                 </Card>
             </ThemeProvider>

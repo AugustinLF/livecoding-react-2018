@@ -14,8 +14,10 @@ class ArtistCard extends React.Component {
     };
     componentDidMount() {
         this.fetchData(this.props.artistName);
+        document.title = this.props.artistName;
     }
     componentDidUpdate(prevProps) {
+        document.title = this.props.artistName;
         if (prevProps.artistName !== this.props.artistName) this.fetchData(this.props.artistName);
     }
     fetchData = artistName => {

@@ -21,7 +21,7 @@ const ArtistRow = ({artist, changeFavorite, favorite, openArtistCard}) => {
             </td>
             <td>{formatNumberToString(artist.playcount)}</td>
             <td>
-                <a href={artist.url} target="_blank">
+                <a href={artist.url} target="_blank" rel="noopener noreferrer">
                     {artist.url}
                 </a>
             </td>

@@ -1,65 +1,81 @@
-import PropTypes from "prop-types";
-import React from "react";
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import { getArtistInfoPromise } from "./libs/actionsHelpers";
-import Card from "./components/card";
-import { ThemeProvider } from "./components/theme";
-import DataFetcher from "./components/dataFetcher";
-import { formatNumberToString, getSimilarArtistsNames } from "./helpers";
-import Tag from "./tag";
+import {getArtistInfoPromise} from './libs/actionsHelpers';
+import Card from './components/card';
+import {ThemeProvider} from './components/theme';
+import {formatNumberToString, getSimilarArtistsNames} from './helpers';
+import Tag from './tag';
 
-const ArtistCard = ({ artistName }) => (
-  <DataFetcher parameters={artistName} getData={getArtistInfoPromise}>
-    {({ isLoading, data: artist }) => {
-      if (isLoading)
+class ArtistCard extends React.Component {
+    state = {
+        artist: null,
+        isLoading: true,
+    };
+    componentDidMount() {
+        this.fetchData(this.props.artistName);
+    }
+    componentDidUpdate(prevProps) {
+        if (prevProps.artistName !== this.props.artistName) this.fetchData(this.props.artistName);
+    }
+    fetchData = artistName => {
+        this.setState({isLoading: true});
+        getArtistInfoPromise(artistName).then(artist => {
+            this.setState({
+                artist,
+                isLoading: false,
+            });
+        });
+    };
+    render() {
+        const {artistName} = this.props;
+        const {artist, isLoading} = this.state;
+
         return (
-          <Card>
-            <div className="loading">Loading</div>
-          </Card>
+            <ThemeProvider value="pink">
+                <Card header={artistName}>
+                    {!isLoading ? (
+                        <div className="artist-card">
+                            <div className="artist-card__main">
+                                <a href={artist.url} target="_blank" rel="noopener noreferrer">
+                                    <img src={artist.image[2]['#text']} alt={artist.name} />
+                                </a>
+                                <div className="artist-card__details">
+                                    <div>
+                                        Play count:{' '}
+                                        {artist.stats &&
+                                            formatNumberToString(artist.stats.playcount)}
+                                    </div>
+                                    {artist.bio && (
+                                        <div
+                                            dangerouslySetInnerHTML={{
+                                                __html: artist.bio.summary,
+                                            }}
+                                        />
+                                    )}
+                                    <div className="artist-card__tags">
+                                        {artist.tags &&
+                                            artist.tags.tag.map(tag => (
+                                                <Tag key={tag.name} name={tag.name} />
+                                            ))}
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                Similar Artists:{' '}
+                                {artist.similar && getSimilarArtistsNames(artist.similar)}
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="loading">Loading</div>
+                    )}
+                </Card>
+            </ThemeProvider>
         );
-      const imgUrl = artist.image[2]["#text"];
-      const similarArtists =
-        artist.similar && getSimilarArtistsNames(artist.similar);
-
-      return (
-        <ThemeProvider value="pink">
-          <Card header={artistName}>
-            <div className="artist-card">
-              <div className="artist-card__main">
-                <a href={artist.url} target="_blank">
-                  <img src={imgUrl} alt={artist.name} />
-                </a>
-                <div className="artist-card__details">
-                  <div>
-                    Play count:{" "}
-                    {artist.stats &&
-                      formatNumberToString(artist.stats.playcount)}
-                  </div>
-                  {artist.bio && (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: artist.bio.summary
-                      }}
-                    />
-                  )}
-                  <div className="artist-card__tags">
-                    {artist.tags &&
-                      artist.tags.tag.map(tag => (
-                        <Tag key={tag.name} name={tag.name} />
-                      ))}
-                  </div>
-                </div>
-              </div>
-              <div>Similar Artists: {similarArtists}</div>
-            </div>
-          </Card>
-        </ThemeProvider>
-      );
-    }}
-  </DataFetcher>
-);
+    }
+}
 ArtistCard.propTypes = {
-  artistName: PropTypes.string.isRequired
+    artistName: PropTypes.string.isRequired,
 };
 
 export default ArtistCard;

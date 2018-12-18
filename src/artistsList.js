@@ -21,7 +21,6 @@ class ArtistsList extends React.Component {
         favorites: [],
         onlyFavorites: false,
         search: '',
-        sorted: false,
     };
 
     componentDidMount() {
@@ -32,10 +31,6 @@ class ArtistsList extends React.Component {
             });
         });
     }
-
-    sortByPlayCount = () => {
-        this.setState(prevState => ({sorted: !prevState.sorted}));
-    };
 
     searchArtist = name => {
         this.setState(() => ({search: name}));
@@ -55,21 +50,9 @@ class ArtistsList extends React.Component {
 
     render() {
         const {openArtistCard} = this.props;
-        const {
-            favorites,
-            onlyFavorites,
-            search,
-            sorted,
-            loading,
-            artists: artistsList,
-        } = this.state;
+        const {favorites, onlyFavorites, search, loading, artists: artistsList} = this.state;
 
-        const artists = getArtistsList(
-            artistsList || [],
-            sorted,
-            search,
-            onlyFavorites ? favorites : null
-        );
+        const artists = getArtistsList(artistsList || [], search, onlyFavorites ? favorites : null);
 
         const header = (
             <div>
@@ -78,9 +61,6 @@ class ArtistsList extends React.Component {
                     <SearchArtist search={search} searchArtist={this.searchArtist} />
                     <button style={{marginLeft: '5px'}} onClick={this.filterFavorites}>
                         {onlyFavorites ? 'Display all' : 'Display only favorites'}
-                    </button>
-                    <button style={{marginLeft: '5px'}} onClick={this.sortByPlayCount}>
-                        {sorted ? 'Remove sorting' : 'Sort by play count'}
                     </button>
                 </div>
             </div>

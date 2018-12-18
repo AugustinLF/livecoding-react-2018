@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/core": "^10.0.5",
     "classnames": "^2.2.6",
+    "emotion": "^10.0.5",
     "react": "16.7.0-alpha.2",
     "react-cache": "^2.0.0-alpha.1",
     "react-dom": "16.7.0-alpha.2",
@@ -11,6 +13,7 @@
     "superagent": "^4.0.0"
   },
   "scripts": {
+    "pres": "mdx-deck pres/deck.mdx",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -24,5 +27,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "mdx-deck": "^1.8.2"
+  }
 }
